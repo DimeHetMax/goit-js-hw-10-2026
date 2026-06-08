@@ -9,4 +9,248 @@
 @import url('./base.css');
 @import url('./container.css');
 
+body:has(#datetime-picker) {
+  position: relative;
+  overflow-x: hidden;
+  padding: 0;
+  color: #e9faff;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(77, 57, 196, 0.3), transparent 32%),
+    radial-gradient(circle at 8% 85%, rgba(0, 229, 255, 0.14), transparent 30%),
+    #050711;
+  font-family: 'Courier New', Courier, monospace;
+}
 
+body:has(#datetime-picker)::before,
+body:has(#datetime-picker)::after {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+}
+
+body:has(#datetime-picker)::before {
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(107, 231, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107, 231, 255, 0.12) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+}
+
+body:has(#datetime-picker)::after {
+  opacity: 0.15;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(159, 239, 255, 0.16) 4px
+  );
+}
+
+body:has(#datetime-picker) main {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+}
+
+body:has(#datetime-picker) section {
+  width: 100%;
+  padding: 48px 0;
+}
+
+body:has(#datetime-picker) .container {
+  width: calc(100% - 32px);
+  max-width: 1120px;
+  min-width: 0;
+  padding: clamp(24px, 5vw, 64px);
+  border: 1px solid rgba(116, 226, 255, 0.32);
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(17, 23, 50, 0.88), rgba(6, 9, 23, 0.82));
+  box-shadow:
+    0 0 0 1px rgba(123, 92, 255, 0.12) inset,
+    0 0 55px rgba(76, 206, 255, 0.12),
+    0 30px 80px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(20px);
+}
+
+body:has(#datetime-picker) .container {
+  text-align: center;
+}
+
+#datetime-picker {
+  width: min(100%, 520px);
+  min-height: 54px;
+  margin: 0 10px 42px 0;
+  padding: 0 18px;
+  border: 1px solid rgba(113, 221, 255, 0.35);
+  border-radius: 10px;
+  outline: none;
+  color: #effdff;
+  background: rgba(2, 8, 20, 0.66);
+  font: 14px/1.5 'Courier New', monospace;
+  letter-spacing: 0.05em;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+#datetime-picker:focus {
+  border-color: #6cecff;
+  box-shadow:
+    0 0 0 3px rgba(108, 236, 255, 0.1),
+    0 0 22px rgba(108, 236, 255, 0.14);
+}
+
+button[data-start] {
+  min-height: 54px;
+  margin-bottom: 42px;
+  padding: 0 28px;
+  border: 1px solid #72efff;
+  border-radius: 10px;
+  color: #041017;
+  background: #72efff;
+  box-shadow: 0 0 24px rgba(114, 239, 255, 0.28);
+  font: 700 12px/1 'Courier New', monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+button[data-start]:hover:not(:disabled) {
+  color: #eaffff;
+  background: transparent;
+  box-shadow: 0 0 30px rgba(114, 239, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+button[data-start]:disabled {
+  border-color: #313b52;
+  color: #6d788b;
+  background: #171c2a;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+body:has(#datetime-picker) .timer {
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 20px);
+}
+
+body:has(#datetime-picker) .field {
+  flex: 1 1 0;
+  position: relative;
+  display: grid;
+  min-width: 0;
+  padding: clamp(18px, 3vw, 30px) 10px clamp(16px, 2vw, 22px);
+  overflow: hidden;
+  border: 1px solid rgba(128, 220, 255, 0.18);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(22, 31, 61, 0.8), rgba(7, 11, 27, 0.9));
+  text-align: center;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.28);
+}
+
+body:has(#datetime-picker) .field::before {
+  position: absolute;
+  top: 0;
+  right: 18%;
+  left: 18%;
+  height: 1px;
+  background: #65eaff;
+  box-shadow: 0 0 12px 2px rgba(101, 234, 255, 0.65);
+  content: '';
+}
+
+body:has(#datetime-picker) .field::after {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid #8f6bff;
+  border-bottom: 1px solid #8f6bff;
+  content: '';
+}
+
+body:has(#datetime-picker) .value {
+  overflow: hidden;
+  color: #f1fdff;
+  font-family: system-ui, sans-serif;
+  font-size: clamp(36px, 8vw, 82px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.07em;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 18px rgba(113, 237, 255, 0.42);
+}
+
+body:has(#datetime-picker) .label {
+  margin-top: 13px;
+  color: #71899a;
+  font-size: clamp(8px, 1.5vw, 10px);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.flatpickr-calendar {
+  border: 1px solid rgba(114, 239, 255, 0.3);
+  background: #0d1224;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+}
+
+.flatpickr-calendar .flatpickr-months,
+.flatpickr-calendar .flatpickr-weekdays,
+.flatpickr-calendar .flatpickr-time,
+.flatpickr-calendar span.flatpickr-weekday {
+  color: #bdeff7;
+  background: #0d1224;
+}
+
+.flatpickr-calendar .flatpickr-day {
+  color: #c8dce2;
+}
+
+.flatpickr-calendar .flatpickr-day:hover,
+.flatpickr-calendar .flatpickr-day.selected {
+  border-color: #65eaff;
+  color: #061017;
+  background: #65eaff;
+}
+
+@media only screen and (max-width: 767px) {
+  body:has(#datetime-picker) section {
+    padding: 16px 0;
+  }
+
+  body:has(#datetime-picker) .container {
+    border-radius: 20px;
+  }
+
+  #datetime-picker {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+
+  button[data-start] {
+    width: 100%;
+    margin-bottom: 32px;
+  }
+
+  body:has(#datetime-picker) .timer {
+    flex-wrap: wrap;
+  }
+
+  body:has(#datetime-picker) .field {
+    flex-basis: calc(50% - 10px);
+  }
+}
