@@ -3,25 +3,38 @@ import flatpickr from 'flatpickr';
 // Додатковий імпорт стилів
 import 'flatpickr/dist/themes/dark.css';
 
-import Notify from 'simple-notify';
-import 'simple-notify/dist/simple-notify.css';
+// Описаний у документації
+import iziToast from 'izitoast';
+// Додатковий імпорт стилів
+import 'izitoast/dist/css/iziToast.min.css';
+iziToast.settings({
+  theme: 'light', // dark
+  position: 'topRight',
+  timeout: 5000,
+  resetOnHover: true,
+  icon: 'material-icons',
+  transitionIn: 'flipInX',
+  transitionOut: 'flipOutX',
+});
+// import Notify from 'simple-notify';
+// import 'simple-notify/dist/simple-notify.css';
 
-const errorNotify = () => {
-  new Notify({
-    status: 'error',
-    text: `Please choose a date in the future!`,
-    effect: 'fade',
-    speed: 300,
-  });
-};
-const successNotify = time => {
-  new Notify({
-    status: 'success',
-    text: `Time ${time}`,
-    effect: 'fade',
-    speed: 300,
-  });
-};
+// const errorNotify = () => {
+//   new Notify({
+//     status: 'error',
+//     text: `Please choose a date in the future!`,
+//     effect: 'fade',
+//     speed: 300,
+//   });
+// };
+// const successNotify = time => {
+//   new Notify({
+//     status: 'success',
+//     text: `Time ${time}`,
+//     effect: 'fade',
+//     speed: 300,
+//   });
+// };
 const button = document.querySelector('[data-start]');
 button.disabled = true;
 
@@ -41,15 +54,25 @@ const options = {
     userSelectedDate = new Date(selectedDates[0]).getTime();
     const dateNow = Date.now();
     if (dateNow > userSelectedDate) {
-      errorNotify(userSelectedDate);
+      //   errorNotify(userSelectedDate);
+
+      iziToast.info({
+        title: 'Hello',
+        message: "Please choose a date in the future",
+      });
       button.disabled = true;
     } else {
       button.disabled = false;
-      successNotify(userSelectedDate);
+
+      iziToast.success({
+        title: 'OK',
+        message: `Successfully inserted record! ${userSelectedDate}`,
+      });
+      //   successNotify(userSelectedDate);
     }
   },
 };
-function convertMs(ms) {
+const convertMs = (ms) =>{
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -67,7 +90,7 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-function addLeadingZero(value) {
+const addLeadingZero = (value) =>{
   return value.padStart(2, '0');
 }
 const handleClick = () => {
