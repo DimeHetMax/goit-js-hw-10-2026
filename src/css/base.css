@@ -477,8 +477,10 @@ body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) li:focus-wit
   scale: 1.22;
 }
 
-body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) a:hover,
-body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) a:focus-visible {
+body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) li:first-child a:hover,
+body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) li:first-child a:focus-visible,
+body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) li:last-child a:hover,
+body:has(a[href='./1-timer.html']):has(a[href='./2-snackbar.html']) li:last-child a:focus-visible {
   filter: brightness(1.28) saturate(1.2);
   transform: perspective(700px) rotateY(0) translateY(-10px) scale(1.025);
 }
