@@ -97,9 +97,14 @@ const handleClick = () => {
   const intervalArr = [];
   const intervalId = setInterval(() => {
     const dateNow = Date.now();
-    const result = convertMs(userSelectedDate - dateNow);
-    console.log(result);
-    daysData.textContent = `${result.days}`;
+    const difference = userSelectedDate - dateNow;
+    if(difference <= 0){
+      button.disabled = true;
+      clearInterval(intervalId)
+      return
+    }
+    const result = convertMs(difference);
+    daysData.textContent = addLeadingZero(String(result.days));
     hoursData.textContent = addLeadingZero(String(result.hours));
     minutesData.textContent = addLeadingZero(String(result.minutes));
     secondsData.textContent = addLeadingZero(String(result.seconds));
@@ -108,6 +113,7 @@ const handleClick = () => {
   if (intervalArr.length > 1) {
     intervalArr.shift();
   }
+  
 };
 flatpickr('input[type=text]', options);
 button.addEventListener('click', handleClick);
