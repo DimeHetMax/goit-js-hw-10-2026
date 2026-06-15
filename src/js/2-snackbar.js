@@ -13,10 +13,10 @@ iziToast.settings({
 });
 
 const form = document.querySelector('.form');
-const logic = ({ delay, status }) => {
+const logic = ({ delay, state }) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (status.includes('fulfilled')) {
+      if (state.includes('fulfilled')) {
         resolve(delay);
       } else {
         reject(delay);
@@ -29,7 +29,7 @@ const handleForm = e => {
   const data = new FormData(e.target);
   const objectData = {
     delay: data.get('delay'),
-    status: data.get('state'),
+    state: data.get('state'),
   };
   console.log(objectData);
   logic(objectData)

@@ -56,7 +56,7 @@ const options = {
     const userDate = selectedDates[0].getTime();
 
     if (userDate <= Date.now()) {
-      iziToast.info({
+      iziToast.error({
         title: 'Error',
         message: 'Please choose a date in the future',
       });
@@ -98,11 +98,15 @@ const updateTime = () => {
   const difference = userSelectedDate - dateNow;
   if (difference <= 0) {
     clearInterval(currentIntervalId);
+    currentIntervalId=null;
     input.disabled = false;
     daysData.textContent = '00';
     hoursData.textContent = '00';
     minutesData.textContent = '00';
     secondsData.textContent = '00';
+    iziToast.info({
+        message: 'The timer is off',
+      });
     return;
   }
   const result = convertMs(difference);
@@ -115,6 +119,9 @@ const addLeadingZero = value => {
   return value.padStart(2, '0');
 };
 const handleClick = () => {
+  if(!userSelectedDate){
+    return;
+  }
   input.disabled = true;
   button.disabled = true;
   if (currentIntervalId) {
