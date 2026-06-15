@@ -17,9 +17,9 @@ const logic = ({ delay, status }) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (status.includes('fulfilled')) {
-        resolve(`✅ Fulfilled promise in ${delay}ms`);
+        resolve(delay);
       } else {
-        reject(`❌ Rejected promise in ${delay}ms`);
+        reject(delay);
       }
     }, delay);
   });
@@ -33,14 +33,15 @@ const handleForm = e => {
   };
   console.log(objectData);
   logic(objectData)
-    .then(data =>
+    .then(delay =>
       iziToast.success({
-        message: data,
+        message: `✅ Fulfilled promise in ${delay}ms`
+,
       })
     )
-    .catch(error =>
+    .catch(delay =>
       iziToast.error({
-        message: error,
+        message: `❌ Rejected promise in ${delay}ms`,
       })
     );
     e.target.reset();

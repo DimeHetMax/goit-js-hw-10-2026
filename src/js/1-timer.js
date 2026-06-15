@@ -101,7 +101,6 @@ const updateTime = () => {
     input.disabled = false;
     return;
   }
-  button.disabled = true;
   const result = convertMs(difference);
   daysData.textContent = addLeadingZero(String(result.days));
   hoursData.textContent = addLeadingZero(String(result.hours));
@@ -113,7 +112,8 @@ const addLeadingZero = value => {
 };
 const handleClick = () => {
   input.disabled = true;
-  if (!currentIntervalId) {
+  button.disabled = true
+  if (currentIntervalId) {
     clearInterval(currentIntervalId);
   }
   currentIntervalId = setInterval(updateTime, 1000);
