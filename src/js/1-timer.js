@@ -37,6 +37,7 @@ iziToast.settings({
 // };
 const button = document.querySelector('[data-start]');
 button.disabled = true;
+const input = document.querySelector('#datetime-picker');
 
 const daysData = document.querySelector('[data-days]');
 const hoursData = document.querySelector('[data-hours]');
@@ -44,6 +45,7 @@ const minutesData = document.querySelector('[data-minutes]');
 const secondsData = document.querySelector('[data-seconds]');
 
 let userSelectedDate = null;
+let currentIntervalId = null;
 
 const options = {
   enableTime: true,
@@ -51,28 +53,28 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    userSelectedDate = new Date(selectedDates[0]).getTime();
-    const dateNow = Date.now();
-    if (dateNow > userSelectedDate) {
-      //   errorNotify(userSelectedDate);
+    const userDate = selectedDates[0].getTime();
 
+    if (userDate <= Date.now()) {
       iziToast.info({
-        title: 'Hello',
-        message: "Please choose a date in the future",
+        title: 'Error',
+        message: 'Please choose a date in the future',
       });
-      button.disabled = true;
-    } else {
-      button.disabled = false;
 
-      iziToast.success({
-        title: 'OK',
-        message: `Successfully inserted record! ${userSelectedDate}`,
-      });
-      //   successNotify(userSelectedDate);
+      button.disabled = true;
+      userSelectedDate = null;
+      return;
     }
+    userSelectedDate = userDate;
+    button.disabled = false;
+
+    iziToast.success({
+      title: 'OK',
+      message: 'Date selected successfully',
+    });
   },
 };
-const convertMs = (ms) =>{
+const convertMs = ms => {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -89,31 +91,32 @@ const convertMs = (ms) =>{
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
-}
-const addLeadingZero = (value) =>{
-  return value.padStart(2, '0');
-}
-const handleClick = () => {
-  const intervalArr = [];
-  const intervalId = setInterval(() => {
-    const dateNow = Date.now();
-    const difference = userSelectedDate - dateNow;
-    if(difference <= 0){
-      button.disabled = true;
-      clearInterval(intervalId)
-      return
-    }
-    const result = convertMs(difference);
-    daysData.textContent = addLeadingZero(String(result.days));
-    hoursData.textContent = addLeadingZero(String(result.hours));
-    minutesData.textContent = addLeadingZero(String(result.minutes));
-    secondsData.textContent = addLeadingZero(String(result.seconds));
-  }, 1000);
-  intervalArr.push(intervalId);
-  if (intervalArr.length > 1) {
-    intervalArr.shift();
+};
+
+const updateTime = () => {
+  const dateNow = Date.now();
+  const difference = userSelectedDate - dateNow;
+  if (difference <= 0) {
+    clearInterval(currentIntervalId);
+    input.disabled = false;
+    return;
   }
-  
+  button.disabled = true;
+  const result = convertMs(difference);
+  daysData.textContent = addLeadingZero(String(result.days));
+  hoursData.textContent = addLeadingZero(String(result.hours));
+  minutesData.textContent = addLeadingZero(String(result.minutes));
+  secondsData.textContent = addLeadingZero(String(result.seconds));
+};
+const addLeadingZero = value => {
+  return value.padStart(2, '0');
+};
+const handleClick = () => {
+  input.disabled = true;
+  if (!currentIntervalId) {
+    clearInterval(currentIntervalId);
+  }
+  currentIntervalId = setInterval(updateTime, 1000);
 };
 flatpickr('input[type=text]', options);
 button.addEventListener('click', handleClick);
