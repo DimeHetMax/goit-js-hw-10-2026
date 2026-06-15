@@ -99,6 +99,10 @@ const updateTime = () => {
   if (difference <= 0) {
     clearInterval(currentIntervalId);
     input.disabled = false;
+    daysData.textContent = '00';
+    hoursData.textContent = '00';
+    minutesData.textContent = '00';
+    secondsData.textContent = '00';
     return;
   }
   const result = convertMs(difference);
@@ -112,11 +116,11 @@ const addLeadingZero = value => {
 };
 const handleClick = () => {
   input.disabled = true;
-  button.disabled = true
+  button.disabled = true;
   if (currentIntervalId) {
     clearInterval(currentIntervalId);
   }
   currentIntervalId = setInterval(updateTime, 1000);
 };
-flatpickr('input[type=text]', options);
+flatpickr(input, options);
 button.addEventListener('click', handleClick);
